@@ -2,7 +2,7 @@ import React, { useState, useLayoutEffect } from "react";
 import { StyleSheet, View, KeyboardAvoidingView } from "react-native";
 import { Button, Input, Text } from "react-native-elements";
 import { StatusBar } from "expo-status-bar";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
 
 const RegisterScreen = ({ navigation }) => {
   const [name, setName] = useState("");
@@ -30,6 +30,16 @@ const RegisterScreen = ({ navigation }) => {
             imageUrl ||
             "https://cencup.com/wp-content/uploads/2019/07/avatar-placeholder.png",
         });
+        db.collection("users")
+          .doc(auth.currentUser.uid)
+          .set({
+            id: auth.currentUser.uid,
+            name,
+            email,
+            photoURL:
+              imageUrl ||
+              "https://cencup.com/wp-content/uploads/2019/07/avatar-placeholder.png",
+          });
       })
       .catch((error) => alert(error.message));
   };

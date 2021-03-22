@@ -7,21 +7,23 @@ import {
   Text,
   View,
 } from "react-native";
-import CustomListItem from "../components/CustomListItem";
+import CustomListItem from "./CustomListItem";
 import { Avatar } from "react-native-elements";
-import { auth, db } from "../firebase";
+import { auth, db } from "../../firebase";
 import { AntDesign, SimpleLineIcons } from "@expo/vector-icons";
 
 const HomeScreen = ({ navigation }) => {
-  const [chats, setChats] = useState([]);
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    const unsubscribe = db.collection("chats").onSnapshot((snapshot) => {
-      setChats(
-        snapshot.docs.map((doc) => ({
-          id: doc.id,
-          data: doc.data(),
-        }))
+    const unsubscribe = db.collection("users").onSnapshot((snapshot) => {
+      setUsers(
+        snapshot.docs
+          .filter((doc) => doc.id !== auth.currentUser.uid)
+          .map((doc) => ({
+            id: doc.id,
+            data: doc.data(),
+          }))
       );
     });
     return unsubscribe;
@@ -59,12 +61,6 @@ const HomeScreen = ({ navigation }) => {
             <AntDesign name="camera" size={24} color="black" />
           </TouchableOpacity>
           <TouchableOpacity
-            activeOpacity={0.5}
-            onPress={() => navigation.navigate("OneChatHome")}
-          >
-            <AntDesign name="user" size={24} color="black" />
-          </TouchableOpacity>
-          <TouchableOpacity
             onPress={() => navigation.navigate("AddChat")}
             activeOpacity={0.5}
           >
@@ -75,20 +71,22 @@ const HomeScreen = ({ navigation }) => {
     });
   }, [navigation]);
 
-  const enterChat = (id, chatName) => {
-    navigation.navigate("Chat", {
+  const enterChat = (id, chatName, photoURL) => {
+    navigation.navigate("OneChat", {
       id,
       chatName,
+      photoURL,
     });
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-        {chats.map(({ id, data: { chatName } }) => (
+        {users.map(({ id, data: { name, photoURL } }) => (
           <CustomListItem
             id={id}
-            chatName={chatName}
+            chatName={name}
+            photoURL={photoURL}
             key={id}
             enterChat={enterChat}
           />
