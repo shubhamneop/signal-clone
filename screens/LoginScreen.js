@@ -12,7 +12,7 @@ const LoginScreen = ({ navigation }) => {
     const unsubscribe = auth.onAuthStateChanged((authUser) => {
       console.log("auth user", authUser);
       if (authUser) {
-        navigation.replace("Home");
+        navigation.replace("OneChatHome");
       }
     });
     return unsubscribe;

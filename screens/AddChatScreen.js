@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { Input, Button } from "react-native-elements";
 import { AntDesign } from "@expo/vector-icons";
 import { db } from "../firebase";
+import firebase from "firebase";
 
 const AddChatScreen = ({ navigation }) => {
   const [input, setInput] = useState("");
@@ -19,9 +20,10 @@ const AddChatScreen = ({ navigation }) => {
       .collection("chats")
       .add({
         chatName: input,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
       })
       .then(() => {
-        navigation.goBack();
+        navigation.navigate("Home");
       })
       .catch((error) => alert(error.message));
   };

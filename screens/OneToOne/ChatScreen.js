@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState, useEffect } from "react";
+import React, { useLayoutEffect, useState, useEffect, useRef } from "react";
 import {
   StyleSheet,
   Text,
@@ -21,6 +21,7 @@ import * as firebase from "firebase";
 const ChatScreen = ({ navigation, route }) => {
   const [input, setInput] = useState();
   const [messages, setMessages] = useState([]);
+  const scrollViewRef = useRef();
 
   const chatID = () => {
     const chatterID = auth.currentUser.uid;
@@ -42,6 +43,7 @@ const ChatScreen = ({ navigation, route }) => {
       displayName: auth.currentUser.displayName,
       email: auth.currentUser.email,
       photoURL: auth.currentUser.photoURL,
+      read: false,
     });
     setInput("");
   };
@@ -91,6 +93,7 @@ const ChatScreen = ({ navigation, route }) => {
         </View>
       ),
     });
+    markRead();
   }, [navigation, messages]);
 
   useEffect(() => {
@@ -109,7 +112,29 @@ const ChatScreen = ({ navigation, route }) => {
       });
     return unsubscribe;
   }, [route]);
-  console.log("message", messages);
+
+  const markRead = () => {
+    if (messages.length != 0) {
+      messages.filter((message) => {
+        if (
+          message?.data?.id != auth.currentUser.uid &&
+          message?.data?.read == false
+        ) {
+          db.collection("messages")
+            .doc(chatID())
+            .collection("chats")
+            .doc(message.id)
+            .set(
+              {
+                read: true,
+              },
+              { merge: true }
+            );
+        }
+      });
+    }
+  };
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
       <StatusBar style="light" />
@@ -119,7 +144,11 @@ const ChatScreen = ({ navigation, route }) => {
         keyboardVerticalOffset={90}
       >
         <>
-          <ScrollView contentContainerStyle={{ paddingTop: 15 }}>
+          <ScrollView
+            contentContainerStyle={{ paddingTop: 15 }}
+            ref={scrollViewRef}
+            overScrollMode="always"
+          >
             {messages.map(({ id, data }) =>
               data.email === auth.currentUser.email ? (
                 <View key={id} style={styles.reciver}>

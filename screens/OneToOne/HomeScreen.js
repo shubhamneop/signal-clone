@@ -10,7 +10,11 @@ import {
 import CustomListItem from "./CustomListItem";
 import { Avatar } from "react-native-elements";
 import { auth, db } from "../../firebase";
-import { AntDesign, SimpleLineIcons } from "@expo/vector-icons";
+import {
+  AntDesign,
+  SimpleLineIcons,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 
 const HomeScreen = ({ navigation }) => {
   const [users, setUsers] = useState([]);
@@ -58,7 +62,12 @@ const HomeScreen = ({ navigation }) => {
           }}
         >
           <TouchableOpacity activeOpacity={0.5}>
-            <AntDesign name="camera" size={24} color="black" />
+            <MaterialCommunityIcons
+              name="view-list"
+              size={24}
+              color="black"
+              onPress={() => navigation.navigate("Home")}
+            />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => navigation.navigate("AddChat")}

@@ -16,14 +16,17 @@ const HomeScreen = ({ navigation }) => {
   const [chats, setChats] = useState([]);
 
   useEffect(() => {
-    const unsubscribe = db.collection("chats").onSnapshot((snapshot) => {
-      setChats(
-        snapshot.docs.map((doc) => ({
-          id: doc.id,
-          data: doc.data(),
-        }))
-      );
-    });
+    const unsubscribe = db
+      .collection("chats")
+      .orderBy("timestamp", "desc")
+      .onSnapshot((snapshot) => {
+        setChats(
+          snapshot.docs.map((doc) => ({
+            id: doc.id,
+            data: doc.data(),
+          }))
+        );
+      });
     return unsubscribe;
   }, []);
 
@@ -55,14 +58,11 @@ const HomeScreen = ({ navigation }) => {
             marginRight: 20,
           }}
         >
-          <TouchableOpacity activeOpacity={0.5}>
-            <AntDesign name="camera" size={24} color="black" />
-          </TouchableOpacity>
           <TouchableOpacity
             activeOpacity={0.5}
             onPress={() => navigation.navigate("OneChatHome")}
           >
-            <AntDesign name="user" size={24} color="black" />
+            <SimpleLineIcons name="user-follow" size={24} color="black" />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => navigation.navigate("AddChat")}
