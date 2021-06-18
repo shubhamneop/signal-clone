@@ -10,7 +10,6 @@ const LoginScreen = ({ navigation }) => {
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((authUser) => {
-      console.log("auth user", authUser);
       if (authUser) {
         navigation.replace("OneChatHome");
       }
@@ -32,8 +31,7 @@ const LoginScreen = ({ navigation }) => {
       <StatusBar style="light" />
       <Image
         source={{
-          uri:
-            "https://blog.mozilla.org/internetcitizen/files/2018/08/signal-logo.png",
+          uri: "https://blog.mozilla.org/internetcitizen/files/2018/08/signal-logo.png",
         }}
         style={{ width: 100, height: 100 }}
       />

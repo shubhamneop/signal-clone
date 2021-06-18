@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Image } from "react-native";
 import { Input, Button } from "react-native-elements";
 import { AntDesign } from "@expo/vector-icons";
 import { db } from "../firebase";
@@ -7,6 +7,7 @@ import firebase from "firebase";
 
 const AddChatScreen = ({ navigation }) => {
   const [input, setInput] = useState("");
+  const [logo, setLogo] = useState(require("../assets//android-icon.png"));
 
   useLayoutEffect(() => {
     navigation.setOptions({

@@ -24,7 +24,7 @@ const HomeScreen = ({ navigation }) => {
           snapshot.docs.map((doc) => ({
             id: doc.id,
             data: doc.data(),
-          }))
+          })),
         );
       });
     return unsubscribe;
@@ -36,7 +36,6 @@ const HomeScreen = ({ navigation }) => {
     });
   };
   useLayoutEffect(() => {
-    console.log("photo", auth?.currentUser?.photoURL);
     navigation.setOptions({
       title: "Signal",
       headerStyle: { backgroundColor: "#fff" },

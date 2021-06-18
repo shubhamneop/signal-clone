@@ -15,6 +15,7 @@ import {
   SimpleLineIcons,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
+import { ActivityIndicator } from "react-native";
 
 const HomeScreen = ({ navigation }) => {
   const [users, setUsers] = useState([]);
@@ -27,7 +28,7 @@ const HomeScreen = ({ navigation }) => {
           .map((doc) => ({
             id: doc.id,
             data: doc.data(),
-          }))
+          })),
       );
     });
     return unsubscribe;
@@ -39,7 +40,6 @@ const HomeScreen = ({ navigation }) => {
     });
   };
   useLayoutEffect(() => {
-    console.log("photo", auth?.currentUser?.photoURL);
     navigation.setOptions({
       title: "Signal",
       headerStyle: { backgroundColor: "#fff" },

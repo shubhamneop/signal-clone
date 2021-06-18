@@ -4,9 +4,9 @@
     "slug": "signal-clone",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/android-icon.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/favicon-96x96.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -21,7 +21,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/favicon-96x96.png",
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.shubhamneop.signalclone"

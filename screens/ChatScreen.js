@@ -17,6 +17,8 @@ import { StatusBar } from "expo-status-bar";
 import { TextInput } from "react-native-gesture-handler";
 import { db, auth } from "../firebase";
 import * as firebase from "firebase";
+import { timeConvert } from "../utility";
+import { LinearGradient } from "expo-linear-gradient";
 
 const ChatScreen = ({ navigation, route }) => {
   const [input, setInput] = useState();
@@ -89,17 +91,16 @@ const ChatScreen = ({ navigation, route }) => {
       .collection("messages")
       .orderBy("timestamp", "asc")
       .onSnapshot((snapshot) => {
-        console.log("dkjsfsdh", snapshot);
         setMessages(
           snapshot.docs.map((doc) => ({
             id: doc.id,
             data: doc.data(),
-          }))
+          })),
         );
       });
     return unsubscribe;
   }, [route]);
-  console.log("message", messages);
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
       <StatusBar style="light" />
@@ -109,62 +110,74 @@ const ChatScreen = ({ navigation, route }) => {
         keyboardVerticalOffset={90}
       >
         <>
-          <ScrollView contentContainerStyle={{ paddingTop: 15 }}>
-            {messages.map(({ id, data }) =>
-              data.email === auth.currentUser.email ? (
-                <View key={id} style={styles.reciver}>
-                  <Avatar
-                    containerStyle={{
-                      position: "absolute",
-                      bottom: -15,
-                      right: -5,
-                    }}
-                    size={30}
-                    position="absolute"
-                    bottom={-15}
-                    right={-5}
-                    rounded
-                    source={{ uri: data.photoURL }}
-                  />
-                  <Text style={styles.recieverText}>{data.message}</Text>
-                </View>
-              ) : (
-                <View key={id} style={styles.sender}>
-                  <Avatar
-                    containerStyle={{
-                      position: "absolute",
-                      bottom: -15,
-                      left: -5,
-                    }}
-                    size={30}
-                    position="absolute"
-                    bottom={-15}
-                    left={-5}
-                    rounded
-                    source={{ uri: data.photoURL }}
-                  />
-                  <Text style={styles.senderText}>{data.message}</Text>
-                  <Text style={styles.senderName}>{data.displayName}</Text>
-                </View>
-              )
-            )}
-          </ScrollView>
-          <View style={styles.footer}>
-            <TextInput
-              style={styles.textIput}
-              placeholder=" Message..."
-              value={input}
-              onSubmitEditing={sendMessage}
-              onChangeText={(text) => setInput(text)}
-            />
-            <TouchableOpacity
-              disabled={!input}
-              onPress={sendMessage}
-              activeOpacity={0.5}
-            >
-              <Ionicons name="send" size={24} color="#2B6BE6" />
-            </TouchableOpacity>
-          </View>
+          <LinearGradient
+            colors={["#0081CF", "#0089BA", "#008E9B"]}
+            style={styles.linearGradient}
+          >
+            <ScrollView contentContainerStyle={{ paddingTop: 15 }}>
+              {messages.map(({ id, data }) =>
+                data.email === auth.currentUser.email ? (
+                  <View key={id} style={styles.reciver}>
+                    <Avatar
+                      containerStyle={{
+                        position: "absolute",
+                        bottom: -15,
+                        right: -5,
+                      }}
+                      size={30}
+                      position="absolute"
+                      bottom={-15}
+                      right={-5}
+                      rounded
+                      source={{ uri: data.photoURL }}
+                    />
+                    <Text style={styles.recieverText}>{data.message}</Text>
+                    <Text style={styles.recieverTime}>
+                      {timeConvert(data?.timestamp)}
+                    </Text>
+                  </View>
+                ) : (
+                  <View key={id} style={styles.sender}>
+                    <Avatar
+                      containerStyle={{
+                        position: "absolute",
+                        bottom: -15,
+                        left: -5,
+                      }}
+                      size={30}
+                      position="absolute"
+                      bottom={-15}
+                      left={-5}
+                      rounded
+                      source={{ uri: data.photoURL }}
+                    />
+                    <Text style={styles.senderText}>{data.message}</Text>
+                    <Text style={styles.senderName}>{data.displayName}</Text>
+                    <Text style={styles.senderTime}>
+                      {timeConvert(data?.timestamp)}
+                    </Text>
+                  </View>
+                ),
+              )}
+            </ScrollView>
+
+            <View style={styles.footer}>
+              <TextInput
+                style={styles.textIput}
+                placeholder=" Message..."
+                value={input}
+                onSubmitEditing={sendMessage}
+                onChangeText={(text) => setInput(text)}
+              />
+              <TouchableOpacity
+                disabled={!input}
+                onPress={sendMessage}
+                activeOpacity={0.5}
+              >
+                <Ionicons name="send" size={24} color="#2B6BE6" />
+              </TouchableOpacity>
+            </View>
+          </LinearGradient>
         </>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -210,6 +223,7 @@ const styles = StyleSheet.create({
     marginRight: 15,
     maxWidth: "80%",
     position: "relative",
+    marginLeft: 5,
     marginBottom: 15,
   },
   senderName: {
@@ -228,5 +242,21 @@ const styles = StyleSheet.create({
     color: "black",
     fontWeight: "500",
     marginLeft: 10,
+  },
+  recieverTime: {
+    position: "relative",
+    right: 13,
+    bottom: -20,
+  },
+  senderTime: {
+    position: "relative",
+    bottom: -20,
+    left: 12,
+  },
+  linearGradient: {
+    flex: 1,
+    paddingLeft: 15,
+    paddingRight: 15,
+    borderRadius: 5,
   },
 });

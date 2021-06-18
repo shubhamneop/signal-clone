@@ -3,6 +3,7 @@ import { StyleSheet, View, KeyboardAvoidingView } from "react-native";
 import { Button, Input, Text } from "react-native-elements";
 import { StatusBar } from "expo-status-bar";
 import { auth, db } from "../firebase";
+import { userImage } from "../utility";
 
 const RegisterScreen = ({ navigation }) => {
   const [name, setName] = useState("");
@@ -16,6 +17,7 @@ const RegisterScreen = ({ navigation }) => {
     });
   }, [navigation]);
 
+  const image = userImage();
   const register = () => {
     if (email == "" || password == "" || name == "") {
       alert("Please fill all details");
@@ -27,7 +29,7 @@ const RegisterScreen = ({ navigation }) => {
         authUser.user.updateProfile({
           displayName: name,
           photoURL:
-            imageUrl ||
+            image ||
             "https://cencup.com/wp-content/uploads/2019/07/avatar-placeholder.png",
         });
         db.collection("users")
@@ -37,7 +39,7 @@ const RegisterScreen = ({ navigation }) => {
             name,
             email,
             photoURL:
-              imageUrl ||
+              image ||
               "https://cencup.com/wp-content/uploads/2019/07/avatar-placeholder.png",
           });
       })

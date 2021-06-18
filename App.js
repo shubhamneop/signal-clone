@@ -12,6 +12,7 @@ import AddChatScreen from "./screens/AddChatScreen";
 import ChatScreen from "./screens/ChatScreen";
 import OneHomeScreen from "./screens/OneToOne/HomeScreen";
 import OneChat from "./screens/OneToOne/ChatScreen";
+import SplashScreen from "./screens/SplashScreen";
 const Stack = createStackNavigator();
 
 const globalScreenOptions = {
@@ -24,9 +25,15 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator
+        initialRouteName="SplashScreen"
         // initialRouteName="Home"
         screenOptions={globalScreenOptions}
       >
+        <Stack.Screen
+          name="SplashScreen"
+          component={SplashScreen}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Register" component={RegisterScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />
